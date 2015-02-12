@@ -1,0 +1,44 @@
+{
+  "name": "movie-list",
+  "version": "1.0.0",
+  "description": "A node program to show a list of your movies sorted by rating",
+  "main": "index.js",
+  "bin": "./bin/movie-list",
+  "dependencies": {
+    "async": "^0.9.0",
+    "chalk": "^0.5.1",
+    "commander": "^2.6.0",
+    "lodash": "^3.1.0",
+    "movie-title": "^0.0.1",
+    "node-movie": "^2.0.0",
+    "q": "^1.1.2"
+  },
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-jshint": "^1.9.2",
+    "jshint-stylish": "^1.0.0"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noamokman/movie-list"
+  },
+  "keywords": [
+    "movie",
+    "imdb",
+    "list",
+    "rating"
+  ],
+  "author": {
+    "name": "Noam Okman",
+    "email": "noamokman@gmail.com",
+    "url": "https://github.com/noamokman"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/noamokman/movie-list/issues"
+  },
+  "homepage": "https://github.com/noamokman/movie-list"
+}
