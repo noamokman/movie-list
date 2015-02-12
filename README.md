@@ -1,4 +1,4 @@
-# movie-list
+# movie-list [![Build Status](https://travis-ci.org/noamokman/movie-list.svg)](https://travis-ci.org/noamokman/movie-list)
 
 A node program to show a list of your movies sorted by rating
 
