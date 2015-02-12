@@ -35,7 +35,7 @@ The path parameter is optional and takes the current working directory as defaul
 ``` bash
   $ [sudo] npm install movie-list --save
 ```
-The movie-list module exposes some useful methods. See the (movie-list cli commands)[https://github.com/noamokman/movie-list/blob/master/cli.js] for sample usage.
+The movie-list module exposes some useful methods. See the [movie-list cli commands](https://github.com/noamokman/movie-list/blob/master/cli.js) for sample usage.
 * [`listFolder`](#listFolder)
 * [`listArray`](#listArray)
 * [`printList`](#printList)
