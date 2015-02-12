@@ -75,6 +75,16 @@ function printList(listData, options) {
         responseA = parseInt(_.trimRight(responseA, ' min'));
         responseB = parseInt(_.trimRight(responseB, ' min'));
       }
+      else if (options.sort === 'imdbRating') {
+        if(responseA === 'N/A')
+        {
+          return 1;
+        }
+        if(responseB === 'N/A')
+        {
+          return -1;
+        }
+      }
 
       if (responseA < responseB)
         return -order;
