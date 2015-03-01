@@ -1,5 +1,7 @@
 var program = require('commander');
 var chalk = require('chalk');
+var pkg = require('./package.json');
+var util = require('util');
 var movieList = require('./');
 
 function parseSort(value) {
@@ -22,7 +24,7 @@ function parseOrder(value) {
 }
 
 program
-  .version('1.0.0')
+  .version(pkg.version)
   .description('A node program to show a list of your movies sorted by rating')
   .usage('[options] [path]')
   .option('-s, --sort <property>', 'Sort by property {title|year|rating|runtime}', parseSort)
@@ -58,6 +60,10 @@ else {
       movieList.printList(listData, printOptions);
     })
     .catch(function (err) {
-      console.error(chalk.red('Error: ' + err));
+      if (util.isError(err)) {
+        console.error(chalk.red(err));
+      } else {
+        console.error(chalk.red('Error: ' + err));
+      }
     });
 }
