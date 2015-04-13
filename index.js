@@ -4,38 +4,105 @@ var fs = require('fs');
 var movieTitle = require('movie-title');
 var async = require('async');
 var chalk = require('chalk');
+var path = require('path');
 var Q = require('q');
 
-function listFolder(path, callback) {
+var fileExtensions = ['.webm', '.mkv', '.flv', '.vob', '.ogv', '.ogg', 'b.rc',
+  '.mng', '.avi', '.mov', '.qt', '.wmv', '.wuv', '.rm', '.rmvb', '.asf',
+  '.mp4', '.m4p', '.m4v', '.mpg', '.mp2', '.mpeg', '.mpe', '.mpg', '.m2v',
+  '.svi', '.3gp', '.3g2', '.mxf', '.roq', '.nsv'];
+
+var knownSamples = ['sample', 'rarbg.com'];
+
+function listFolder(dirPath, callback) {
   callback = callback || _.noop;
   var deferred = Q.defer();
 
-  fs.readdir(path, function (err, files) {
+  listFolderInternal(dirPath).then(function (files) {
+    var filtered = _.filter(files, function (file) {
+      return isMovie(file) && !isSample(file);
+    });
+    deferred.resolve(listArray(filtered, callback));
+  }).fail(function (err) {
+    callback(err);
+    deferred.reject(err);
+  });
+
+  return deferred.promise;
+}
+
+function isMovie(file) {
+  return fileExtensions.indexOf(path.extname(file).toLowerCase()) !== -1;
+}
+
+function isSample(file) {
+  return knownSamples.indexOf(path.basename(file, path.extname(file)).toLowerCase()) !== -1;
+}
+
+function listFolderInternal(dirPath) {
+  var deferred = Q.defer();
+
+  fs.readdir(dirPath, function (err, dirs) {
     if (err) {
-      deferred.reject(err);
-      return callback(err);
+      return deferred.reject(err);
     } else {
-      deferred.resolve(listArray(files, callback));
+      dirs = _.map(dirs, function (dir) {
+        return path.join(dirPath, dir);
+      });
+
+      async.map(dirs, function (dir, callback) {
+        fs.stat(dir, function (err, stat) {
+          if (err) {
+            return callback(err);
+          }
+
+          callback(null, { dir: dir, stat: stat });
+        })
+      }, function (err, dirStats) {
+        var files = [];
+        var promises = [];
+
+        _.forEach(dirStats, function (dirStat) {
+          if (dirStat.stat.isDirectory()) {
+            promises.push(listFolderInternal(dirStat.dir));
+          } else {
+            files.push(dirStat.dir);
+          }
+        });
+
+        Q.all(promises).then(function (directories) {
+          var directoriesFiles = _.flattenDeep(directories);
+          files = files.concat(directoriesFiles);
+
+          deferred.resolve(files);
+        });
+      });
     }
   });
 
   return deferred.promise;
 }
 
-function listArray(movieFileNames, callback) {
+function listArray(movieFilePaths, callback) {
   callback = callback || _.noop;
   var deferred = Q.defer();
 
-  var movies = _.map(movieFileNames, movieTitle);
+  var movies = _.map(movieFilePaths, function (moviePath) {
+    return {
+      path: moviePath,
+      title: movieTitle(path.basename(moviePath))
+    }
+  });
 
-  async.map(movies, function (movieName, cb) {
-    movie(movieName, function (err, data) {
+  async.map(movies, function (movieInfo, cb) {
+    movie(movieInfo.title, function (err, data) {
       if (err) {
         return cb(err);
       }
 
       cb(null, {
-        title: movieName,
+        title: movieInfo.title,
+        path: movieInfo.path,
         response: data
       });
     });
