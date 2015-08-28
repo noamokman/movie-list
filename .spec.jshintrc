@@ -7,5 +7,7 @@
   "undef": true,
   "unused": true,
   "node": true,
-  "globalstrict": true
+  "globalstrict": true,
+  "expr": true,
+  "mocha": true
 }

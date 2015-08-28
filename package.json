@@ -2,25 +2,16 @@
   "name": "movie-list",
   "version": "1.0.2",
   "description": "A node program to show a list of your movies sorted by rating",
-  "main": "index.js",
-  "bin": "./bin/movie-list",
-  "dependencies": {
-    "async": "^0.9.0",
-    "chalk": "^1.0.0",
-    "commander": "^2.6.0",
-    "lodash": "^3.3.1",
-    "movie-title": "^0.0.1",
-    "node-movie": "^2.0.0",
-    "q": "^1.2.0"
-  },
-  "devDependencies": {
-    "gulp": "^3.8.11",
-    "gulp-jshint": "^1.9.2",
-    "jshint-stylish": "^1.0.1"
-  },
+  "main": "lib/index.js",
+  "bin": "bin/movie-list",
   "scripts": {
-    "test": "gulp test"
+    "lint": "gulp lint",
+    "test": "gulp test",
+    "coveralls": "gulp coveralls"
   },
+  "pre-commit": [
+    "lint"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/noamokman/movie-list"
@@ -40,5 +31,28 @@
   "bugs": {
     "url": "https://github.com/noamokman/movie-list/issues"
   },
-  "homepage": "https://github.com/noamokman/movie-list"
+  "homepage": "https://github.com/noamokman/movie-list",
+  "dependencies": {
+    "async": "^1.4.2",
+    "chalk": "^1.1.1",
+    "commander": "^2.8.1",
+    "lodash": "^3.10.1",
+    "movie-title": "^0.0.1",
+    "node-movie": "^2.0.0",
+    "q": "^1.4.1"
+  },
+  "devDependencies": {
+    "git-validate": "^2.0.3",
+    "gulp": "^3.9.0",
+    "gulp-bump": "^0.3.1",
+    "gulp-coveralls": "^0.1.4",
+    "gulp-istanbul": "^0.10.0",
+    "gulp-jscs": "^2.0.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-mocha": "^2.1.3",
+    "jscs-nachos": "^1.0.1",
+    "jshint-stylish": "^2.0.1",
+    "lazypipe": "^1.0.1",
+    "run-sequence": "^1.1.2"
+  }
 }
