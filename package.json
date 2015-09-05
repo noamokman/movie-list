@@ -35,13 +35,19 @@
   "dependencies": {
     "async": "^1.4.2",
     "chalk": "^1.1.1",
+    "cli-table2": "^0.1.9",
     "commander": "^2.8.1",
+    "debug": "^2.2.0",
+    "globby": "^3.0.1",
     "lodash": "^3.10.1",
-    "movie-title": "^0.0.1",
-    "node-movie": "^2.0.0",
-    "q": "^1.4.1"
+    "movie-title": "^1.0.0",
+    "omdb": "^0.3.0",
+    "q": "^1.4.1",
+    "video-extensions": "^1.1.0"
   },
   "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
     "git-validate": "^2.0.3",
     "gulp": "^3.9.0",
     "gulp-bump": "^0.3.1",
@@ -53,6 +59,9 @@
     "jscs-nachos": "^1.0.1",
     "jshint-stylish": "^2.0.1",
     "lazypipe": "^1.0.1",
-    "run-sequence": "^1.1.2"
+    "mockery": "^1.4.0",
+    "run-sequence": "^1.1.2",
+    "sinon": "^1.16.1",
+    "sinon-chai": "^2.8.0"
   }
 }
