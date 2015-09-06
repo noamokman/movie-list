@@ -42,6 +42,7 @@
     "lodash": "^3.10.1",
     "movie-title": "^1.0.0",
     "omdb": "^0.3.0",
+    "pinkie-promise": "^1.0.0",
     "q": "^1.4.1",
     "throat": "^2.0.2",
     "video-extensions": "^1.1.0"
