@@ -49,9 +49,13 @@ describe('movie-list', function () {
 
   describe('with valid options', function () {
     beforeEach(function () {
-      var globbyMock = sinon.stub().returns(Q.resolve(['San.Andreas.2015.720p.WEBRIP.x264.AC3-EVE.mkv', 'Aloha.2015.1080p.BluRay.x264.DTS-WiKi.mkv', 'server.error.1993.720p.DVDRIP.x264.AC3-EVE.mkv']));
+      var globbyMock = sinon.stub().returns(Q.resolve(['San.Andreas.2015.720p.WEBRIP.x264.AC3-EVE.mkv', 'Aloha.2015.1080p.BluRay.x264.DTS-WiKi.mkv', 'server.error.1993.720p.DVDRIP.x264.AC3-EVE.mkv', 'not.found.1993.720p.DVDRIP.x264.AC3-EVE.mkv']));
       var omdbMock = {
         get: function (name, cb) {
+          if (name === 'server error') {
+            return cb(new Error('Not Found!'));
+          }
+
           var value = {
             'San Andreas': {
               bla: 'bla'
@@ -62,7 +66,7 @@ describe('movie-list', function () {
           }[name];
 
           if (!value) {
-            return cb(new Error('Not Found!'));
+            return cb();
           }
 
           cb(null, value);
