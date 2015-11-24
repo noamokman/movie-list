@@ -1,5 +1,5 @@
 'use strict';
 
-module.exports = function (gulp) {
+export default gulp => {
   gulp.task('default', ['test']);
 };

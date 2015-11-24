@@ -1,10 +1,10 @@
 'use strict';
 
-var config = require('../config');
-var coveralls = require('gulp-coveralls');
+import config from '../config';
+import coveralls from 'gulp-coveralls';
 
-module.exports = function (gulp) {
-  gulp.task('coveralls', function () {
+export default gulp => {
+  gulp.task('coveralls', () => {
     return gulp.src(config.paths.coverage)
       .pipe(coveralls());
   });

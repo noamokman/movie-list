@@ -1,12 +1,13 @@
 'use strict';
 
-module.exports = {
+export default {
   paths: {
     lib: './lib/**/*.js',
+    src: './src/**/*.js',
     test: './test/**/*.spec.js',
-    gulp: ['./gulpfile.js', './gulp/**/*.js'],
+    gulp: ['./gulpfile.babel.js', './gulp/**/*.js'],
     coverage: 'coverage/**/lcov.info',
-    cliFile: './lib/cli.js'
+    cliFile: './src/cli.js'
   },
   manifests: ['./package.json']
 };

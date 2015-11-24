@@ -1,17 +1,23 @@
 'use strict';
 
-var mocha = require('gulp-mocha');
-var istanbul = require('gulp-istanbul');
-var config = require('../config');
+import mocha from 'gulp-mocha';
+import istanbul from 'gulp-babel-istanbul';
+import mergeStream from 'merge-stream';
+import babel from 'gulp-babel';
+import config from '../config';
 
-module.exports = function (gulp) {
-  gulp.task('test', ['lint'], function (cb) {
-    gulp.src(['!' + config.paths.cliFile].concat(config.paths.lib))
-      .pipe(istanbul({
-        includeUntested: true
-      }))
+export default gulp => {
+  gulp.task('test', ['eslint'], cb => {
+    mergeStream(
+      gulp.src([`!${config.paths.cliFile}`].concat(config.paths.src))
+        .pipe(istanbul({
+          includeUntested: true
+        })),
+      gulp.src(config.paths.test)
+        .pipe(babel())
+    )
       .pipe(istanbul.hookRequire())
-      .on('finish', function () {
+      .on('finish', () => {
         gulp.src(config.paths.test)
           .pipe(mocha({reporter: 'spec'}))
           .pipe(istanbul.writeReports())

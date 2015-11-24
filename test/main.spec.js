@@ -1,62 +1,103 @@
 'use strict';
 
-var chai = require('chai');
-var expect = chai.expect;
-var sinon = require('sinon');
-var mockery = require('mockery');
-var Q = require('q');
+import chai from 'chai';
+import sinon from 'sinon';
+import mockery from 'mockery';
+import Promise from 'pinkie-promise';
+const expect = chai.expect;
 
 chai.use(require('sinon-chai'));
 chai.use(require('chai-as-promised'));
 
-describe('movie-list', function () {
-  var movieList = require('../lib');
+describe('movie-list', () => {
+  let movieList = require('../src');
 
-  describe('with invalid options', function () {
-    it('should reject options as function', function () {
-      var fn = function () {
-        movieList(function () {
-        });
-      };
-
-      expect(fn).to.throw(TypeError, 'options must be an object');
-    });
-
-    it('should reject options as string', function () {
-      var fn = function () {
-        movieList('bla');
-      };
-
-      expect(fn).to.throw(TypeError, 'options must be an object');
-    });
-
-    it('should reject options as number', function () {
-      var fn = function () {
-        movieList(5);
-      };
-
-      expect(fn).to.throw(TypeError, 'options must be an object');
-    });
-
-    it('should reject options as boolean', function () {
-      var fn = function () {
-        movieList(true);
-      };
-
-      expect(fn).to.throw(TypeError, 'options must be an object');
+  describe('exports', () => {
+    it('should expose a function', () => {
+      expect(movieList).to.be.a('function');
     });
   });
 
-  describe('with valid options', function () {
-    beforeEach(function () {
-      var globbyMock = sinon.stub().returns(Q.resolve(['San.Andreas.2015.720p.WEBRIP.x264.AC3-EVE.mkv', 'Aloha.2015.1080p.BluRay.x264.DTS-WiKi.mkv', 'server.error.1993.720p.DVDRIP.x264.AC3-EVE.mkv', 'not.found.1993.720p.DVDRIP.x264.AC3-EVE.mkv']));
-      var omdbMock = {
-        get: function (name, cb) {
+  describe('with invalid', () => {
+    describe('concurrentRequests', () => {
+      it('should reject a function', () => {
+        const fn = () => {
+          movieList({concurrentRequests: () => {}});
+        };
+
+        expect(fn).to.throw(TypeError, 'concurrentRequests must be a number');
+      });
+
+      it('should reject a string', () => {
+        const fn = () => {
+          movieList({concurrentRequests: 'hola'});
+        };
+
+        expect(fn).to.throw(TypeError, 'concurrentRequests must be a number');
+      });
+
+      it('should reject an object', () => {
+        const fn = () => {
+          movieList({concurrentRequests: {}});
+        };
+
+        expect(fn).to.throw(TypeError, 'concurrentRequests must be a number');
+      });
+
+      it('should reject a boolean', () => {
+        const fn = () => {
+          movieList({concurrentRequests: true});
+        };
+
+        expect(fn).to.throw(TypeError, 'concurrentRequests must be a number');
+      });
+    });
+
+    describe('source', () => {
+      it('should reject a function', () => {
+        const fn = () => {
+          movieList({source: () => {}});
+        };
+
+        expect(fn).to.throw(TypeError, 'source must be a string');
+      });
+
+      it('should reject a number', () => {
+        const fn = () => {
+          movieList({source: 5});
+        };
+
+        expect(fn).to.throw(TypeError, 'source must be a string');
+      });
+
+      it('should reject an object', () => {
+        const fn = () => {
+          movieList({source: {}});
+        };
+
+        expect(fn).to.throw(TypeError, 'source must be a string');
+      });
+
+      it('should reject a boolean', () => {
+        const fn = () => {
+          movieList({source: true});
+        };
+
+        expect(fn).to.throw(TypeError, 'source must be a string');
+      });
+    });
+  });
+
+  describe('with valid options', () => {
+    beforeEach(() => {
+      const globbyMock = sinon.stub().returns(Promise.resolve(['San.Andreas.2015.720p.WEBRIP.x264.AC3-EVE.mkv', 'Aloha.2015.1080p.BluRay.x264.DTS-WiKi.mkv', 'server.error.1993.720p.DVDRIP.x264.AC3-EVE.mkv', 'not.found.1993.720p.DVDRIP.x264.AC3-EVE.mkv']));
+      const omdbMock = {
+        get: (name, cb) => {
           if (name === 'server error') {
             return cb(new Error('Not Found!'));
           }
 
-          var value = {
+          const value = {
             'San Andreas': {
               bla: 'bla'
             },
@@ -81,18 +122,18 @@ describe('movie-list', function () {
         warnOnUnregistered: false
       });
 
-      movieList = require('../lib');
+      movieList = require('../src');
     });
 
-    afterEach(function () {
+    afterEach(() => {
       mockery.deregisterMock('globby');
       mockery.deregisterMock('omdb');
       mockery.disable();
     });
 
-    it('should return an organized list', function () {
+    it('should return an organized list', () => {
       return movieList()
-        .then(function (listData) {
+        .then(listData => {
           expect(listData).to.have.property('succeeded')
             .that.is.an('array');
           expect(listData).to.have.property('failed')
@@ -111,12 +152,6 @@ describe('movie-list', function () {
           expect(listData.failed[0]).to.have.property('reason')
             .that.is.an('Error');
         });
-    });
-  });
-
-  describe('exports', function () {
-    it('should expose a function', function () {
-      expect(movieList).to.be.a('function');
     });
   });
 });
