@@ -48,7 +48,7 @@ module.exports = ({movieGlob = DEFAULT_GLOB, source = process.cwd(), concurrentR
           name: movieTitle(path.basename(file))
         };
 
-        return pify(omdb.get)(movieInfo.name)
+        return pify(omdb.get, Promise)(movieInfo.name)
           .then(info => {
             movieInfo.info = info;
 
