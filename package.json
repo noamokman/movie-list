@@ -63,7 +63,7 @@
     "gulp-babel": "^6.1.0",
     "gulp-babel-istanbul": "^0.10.2",
     "gulp-coveralls": "^0.1.4",
-    "gulp-eslint": "^1.1.0",
+    "gulp-eslint": "^1.1.1",
     "gulp-if": "^2.0.0",
     "gulp-mocha": "^2.2.0",
     "gulp-sourcemaps": "^1.6.0",
