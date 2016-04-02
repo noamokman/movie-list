@@ -10,7 +10,7 @@
     "lint-test": "eslint test --fix",
     "babel": "babel src -d lib -s",
     "build": "rimraf lib && npm run babel",
-    "coveralls": "coveralls ./coverage/lcov.info",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "prepublish": "npm run build",
     "test": "npm run lint && babel-node ./node_modules/babel-istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha --report lcovonly --report text --report html -- --compilers js:babel-register test",
     "posttest": "babel-istanbul check-coverage --statements 100 --functions 100 --branches 100 --lines 100"
