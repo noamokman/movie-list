@@ -1,13 +1,13 @@
-'use strict';
-
 import chai from 'chai';
 import sinon from 'sinon';
 import mockery from 'mockery';
 import Promise from 'pinkie-promise';
+import sinonChai from 'sinon-chai';
+import chaiAsPromised from 'chai-as-promised';
 const expect = chai.expect;
 
-chai.use(require('sinon-chai'));
-chai.use(require('chai-as-promised'));
+chai.use(sinonChai);
+chai.use(chaiAsPromised);
 
 describe('movie-list', () => {
   let movieList = require('../src');
@@ -84,6 +84,40 @@ describe('movie-list', () => {
         };
 
         expect(fn).to.throw(TypeError, 'source must be a string');
+      });
+    });
+
+    describe('movieGlob', () => {
+      it('should reject a function', () => {
+        const fn = () => {
+          movieList({movieGlob: () => {}});
+        };
+
+        expect(fn).to.throw(TypeError, 'movieGlob must be a string or a string array');
+      });
+
+      it('should reject a number', () => {
+        const fn = () => {
+          movieList({movieGlob: 5});
+        };
+
+        expect(fn).to.throw(TypeError, 'movieGlob must be a string or a string array');
+      });
+
+      it('should reject an object', () => {
+        const fn = () => {
+          movieList({movieGlob: {}});
+        };
+
+        expect(fn).to.throw(TypeError, 'movieGlob must be a string or a string array');
+      });
+
+      it('should reject a boolean', () => {
+        const fn = () => {
+          movieList({movieGlob: true});
+        };
+
+        expect(fn).to.throw(TypeError, 'movieGlob must be a string or a string array');
       });
     });
   });
