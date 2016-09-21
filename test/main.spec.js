@@ -1,7 +1,6 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import mockery from 'mockery';
-import Promise from 'pinkie-promise';
 import sinonChai from 'sinon-chai';
 import chaiAsPromised from 'chai-as-promised';
 const expect = chai.expect;
