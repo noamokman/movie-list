@@ -5,11 +5,9 @@ import globby from 'globby';
 import videoExtensions from 'video-extensions';
 import movieTitle from 'movie-title';
 import omdb from 'omdb';
-import throatModule from 'throat';
-import Promise from 'pinkie-promise';
+import throat from 'throat';
 import pify from 'pify';
 const debug = debugModule('movieList');
-const throat = throatModule(Promise);
 
 const DEFAULT_GLOB = [`**/*.{${videoExtensions.join(',')}}`, '!**/*{sample,Sample,rarbg.com,RARBG.com}*.*'];
 const DEFAULT_CONCURRENT_REQUESTS = 15;
@@ -42,7 +40,7 @@ module.exports = ({movieGlob = DEFAULT_GLOB, source = process.cwd(), concurrentR
           name: movieTitle(basename(file))
         };
 
-        return pify(omdb.get, Promise)(movieInfo.name)
+        return pify(omdb.get)(movieInfo.name)
           .then(info => {
             movieInfo.info = info;
 
@@ -72,7 +70,7 @@ module.exports = ({movieGlob = DEFAULT_GLOB, source = process.cwd(), concurrentR
           });
       };
 
-      return Promise.all(files.map(throat(getMovieData, concurrentRequests)));
+      return Promise.all(files.map(throat(concurrentRequests, getMovieData)));
     })
     .then(results => {
       debug('results: %j', results);
