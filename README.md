@@ -7,7 +7,6 @@ A node program to show a list of your movies sorted by rating
     <tr>
       <th>Linux</th>
       <th>OSX</th>
-      <th>Windows</th>
       <th>Coverage</th>
       <th>Dependencies</th>
       <th>DevDependencies</th>
@@ -17,9 +16,6 @@ A node program to show a list of your movies sorted by rating
     <tr>
       <td colspan="2" align="center">
         <a href="https://travis-ci.org/noamokman/movie-list"><img src="https://img.shields.io/travis/noamokman/movie-list.svg?style=flat-square"></a>
-      </td>
-      <td align="center">
-        <a href="https://ci.appveyor.com/project/noamokman/movie-list"><img src="https://img.shields.io/appveyor/ci/noamokman/movie-list.svg?style=flat-square"></a>
       </td>
       <td align="center">
 <a href='https://coveralls.io/r/noamokman/movie-list'><img src='https://img.shields.io/coveralls/noamokman/movie-list.svg?style=flat-square' alt='Coverage Status' /></a>
@@ -48,7 +44,6 @@ $ [sudo] npm install movie-list --save
 
 ## Usage
 ### CLI
-#### Options
 ``` bash
 $ movie-list --help
 
@@ -69,7 +64,6 @@ $ movie-list --help
 ```
 
 ### Programmatically
-#### Example
 ``` js
 var movieList = require('movie-list');
 
@@ -85,11 +79,6 @@ Option              | Description                                       | Defaul
 movieGlob           | The glob to use when searching movie files, built with [video-extensions](https://www.npmjs.com/package/video-extensions)| `['**/*.{' + videoExtensions.join(',') + '}', '!**/*{sample,Sample,rarbg.com,RARBG.com}*.*']`
 source              | the path to the movies folder, glob searches here | `process.cwd()`
 concurrentRequests  | Number of concurrent requests to omdb             | 15
-
-## Run Tests
-``` bash
-$ npm test
-```
 
 ## License
 

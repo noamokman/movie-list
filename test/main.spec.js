@@ -21,7 +21,7 @@ describe('movie-list', () => {
     describe('concurrentRequests', () => {
       it('should reject a function', () => {
         const fn = () => {
-          movieList({concurrentRequests: () => {}});
+          movieList({concurrentRequests: () => 5});
         };
 
         expect(fn).to.throw(TypeError, 'concurrentRequests must be a number');
@@ -55,7 +55,7 @@ describe('movie-list', () => {
     describe('source', () => {
       it('should reject a function', () => {
         const fn = () => {
-          movieList({source: () => {}});
+          movieList({source: () => 5});
         };
 
         expect(fn).to.throw(TypeError, 'source must be a string');
@@ -89,7 +89,7 @@ describe('movie-list', () => {
     describe('movieGlob', () => {
       it('should reject a function', () => {
         const fn = () => {
-          movieList({movieGlob: () => {}});
+          movieList({movieGlob: () => 5});
         };
 
         expect(fn).to.throw(TypeError, 'movieGlob must be a string or a string array');

@@ -5,10 +5,11 @@
   "main": "lib/index.js",
   "bin": "bin/movie-list",
   "scripts": {
-    "lint": "npm run lint-src && npm run lint-test",
+    "lint": "run-p lint-*",
     "lint-src": "eslint src --fix",
     "lint-test": "eslint test --fix",
-    "lint-staged": "lint-staged",
+    "precommit": "lint-staged",
+    "commitmsg": "validate-commit-msg",
     "babel": "babel src -d lib -s",
     "build": "rimraf lib && npm run babel",
     "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
@@ -16,17 +17,8 @@
     "test": "npm run lint && babel-node ./node_modules/babel-istanbul/lib/cli.js cover ./node_modules/mocha/bin/_mocha --report lcovonly --report text --report html -- --compilers js:babel-register test",
     "posttest": "babel-istanbul check-coverage --statements 100 --functions 100 --branches 100 --lines 100"
   },
-  "config": {
-    "ghooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "lint-staged": {
-    "src/**.js": [
-      "eslint --fix",
-      "git add"
-    ],
-    "test/**.js": [
+    "*.js": [
       "eslint --fix",
       "git add"
     ]
@@ -51,13 +43,16 @@
     "url": "https://github.com/noamokman/movie-list/issues"
   },
   "homepage": "https://github.com/noamokman/movie-list",
+  "engines": {
+    "node": ">=4"
+  },
   "dependencies": {
     "chalk": "^1.1.3",
     "cli-table2": "^0.2.0",
     "commander": "^2.9.0",
     "debug": "^2.2.0",
     "globby": "^6.0.0",
-    "lodash": "^4.16.1",
+    "lodash": "^4.16.4",
     "movie-title": "^1.0.2",
     "omdb": "^0.7.0",
     "pify": "^2.3.0",
@@ -66,22 +61,23 @@
     "video-extensions": "^1.1.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.14.0",
-    "babel-eslint": "^6.1.2",
+    "babel-cli": "^6.16.0",
     "babel-istanbul": "^0.11.0",
-    "babel-preset-es2015-node4": "^2.1.0",
-    "babel-register": "^6.14.0",
+    "babel-preset-env": "0.0.6",
+    "babel-register": "^6.16.3",
     "chai": "^3.5.0",
-    "chai-as-promised": "^5.3.0",
+    "chai-as-promised": "^6.0.0",
     "coveralls": "^2.11.14",
-    "eslint": "^3.5.0",
-    "eslint-config-noamokman": "^3.0.1",
-    "ghooks": "^1.3.2",
-    "lint-staged": "^3.0.2",
-    "mocha": "^3.0.2",
-    "mockery": "^1.7.0",
+    "eslint": "^3.8.1",
+    "eslint-config-noamokman": "^5.0.1",
+    "husky": "^0.11.9",
+    "lint-staged": "^3.2.0",
+    "mocha": "^3.1.2",
+    "mockery": "^2.0.0",
+    "npm-run-all": "^3.1.1",
     "rimraf": "^2.5.4",
     "sinon": "^1.17.6",
-    "sinon-chai": "^2.8.0"
+    "sinon-chai": "^2.8.0",
+    "validate-commit-msg": "^2.8.2"
   }
 }
