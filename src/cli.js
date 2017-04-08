@@ -1,6 +1,6 @@
 import program from 'commander';
 import chalk from 'chalk';
-import pkg from './../package.json';
+import pkg from '../package.json';
 import util from 'util';
 import _ from 'lodash';
 import Table from 'cli-table2';
@@ -60,7 +60,7 @@ module.exports = argv => {
       }
 
       if (listData.succeeded) {
-        if (!(program.sort && _.contains(['title', 'year', 'imdb.rating', 'runtime'], program.sort))) {
+        if (!_.includes(['title', 'year', 'imdb.rating', 'runtime'], program.sort)) {
           program.sort = 'imdb.rating';
         }
 
@@ -90,8 +90,7 @@ module.exports = argv => {
           }
         });
 
-        listData.succeeded.forEach(result => {
-          const info = result.info;
+        listData.succeeded.forEach(({info}) => {
           const output = [chalk.cyan(info.title), info.year, chalk.yellow(info.imdb.rating), chalk.green(info.genres), chalk.red(info.runtime)];
 
           if (program.table) {
@@ -121,8 +120,8 @@ module.exports = argv => {
         });
 
         console.log(`Failed: ${listData.failed.length}`);
-        listData.failed.forEach(result => {
-          const output = [chalk.cyan(result.value.name), chalk.red(util.isError(result.reason) ? result.reason : `Error: ${result.reason}`)];
+        listData.failed.forEach(({value, reason}) => {
+          const output = [chalk.cyan(value.name), chalk.red(util.isError(reason) ? reason : `Error: ${reason}`)];
 
           if (program.table) {
             failedTable.push(output);
