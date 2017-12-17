@@ -1,14 +1,18 @@
 import _ from 'lodash';
-import movieList from '../src';
+import movieList, {saveKey} from '../src';
 
 describe('movie-list', () => {
   describe('exports', () => {
-    it('should expose a function', () => {
+    it('should expose a default function', () => {
       expect(typeof movieList).toBe('function');
+    });
+
+    it('should expose a saveKey function', () => {
+      expect(typeof saveKey).toBe('function');
     });
   });
 
-  describe('with invalid', () => {
+  describe('with invalid options', () => {
     describe('concurrentRequests', () => {
       it('should reject a function', () => {
         const fn = () => {
@@ -113,22 +117,30 @@ describe('movie-list', () => {
   });
 
   describe('with valid options', () => {
-    it('should return an organized list', () => movieList()
-      .then(listData => {
-        expect(listData).toHaveProperty('succeeded');
-        expect(listData).toHaveProperty('failed');
+    it('should reject if no key was saved', () => {
+      expect(() => movieList()).toThrow('No api key provided');
+    });
 
-        expect(listData.succeeded).toHaveLength(2);
+    it('should return an organized list', () => {
+      saveKey({apiKey: 'lol'});
 
-        expect(listData.succeeded[0]).toHaveProperty('path');
-        expect(listData.succeeded[0]).toHaveProperty('name');
-        expect(listData.succeeded[0]).toHaveProperty('info');
+      return movieList()
+        .then(listData => {
+          expect(listData).toHaveProperty('succeeded');
+          expect(listData).toHaveProperty('failed');
 
-        expect(listData.failed).toHaveLength(2);
+          expect(listData.succeeded).toHaveLength(2);
 
-        expect(listData.failed[0]).toHaveProperty('state', 'failed');
-        expect(listData.failed[0]).toHaveProperty('value');
-        expect(listData.failed[0]).toHaveProperty('reason');
-      }));
+          expect(listData.succeeded[0]).toHaveProperty('path');
+          expect(listData.succeeded[0]).toHaveProperty('name');
+          expect(listData.succeeded[0]).toHaveProperty('info');
+
+          expect(listData.failed).toHaveLength(2);
+
+          expect(listData.failed[0]).toHaveProperty('state', 'failed');
+          expect(listData.failed[0]).toHaveProperty('value');
+          expect(listData.failed[0]).toHaveProperty('reason');
+        });
+    });
   });
 });

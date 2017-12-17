@@ -5,7 +5,7 @@ import _ from 'lodash';
 import Table from 'cli-table2';
 import updateNotifier from 'update-notifier';
 import pkg from '../package.json';
-import movieList from '.';
+import movieList, {saveKey} from '.';
 
 const notifier = updateNotifier({pkg});
 
@@ -25,14 +25,17 @@ program.version(pkg.version)
       }
 
       if (listData.succeeded) {
-        if (!sort || sort === 'rating') {
-          sort = 'imdb.rating';
-        }
+        const sortMap = {
+          title: 'Title',
+          year: 'Year',
+          rating: 'imdbRating',
+          runtime: 'Runtime'
+        };
 
         logger.info(`Succeeded: ${listData.succeeded.length}`);
         listData.succeeded.sort((a, b) => {
           const orderIndicator = order === 'asc' ? 1 : -1;
-          const prop = _.property(sort);
+          const prop = _.property(sortMap[sort]);
 
           const responseA = prop(a.info);
           const responseB = prop(b.info);
@@ -48,7 +51,7 @@ program.version(pkg.version)
         });
 
         listData.succeeded.forEach(({info}) => {
-          const output = [chalk.cyan(info.title), info.year, chalk.yellow(info.imdb.rating), chalk.green(info.genres), chalk.red(info.runtime)];
+          const output = [chalk.cyan(info.Title), info.Year, chalk.yellow(info.imdbRating), chalk.green(info.Genre), chalk.red(info.Runtime)];
 
           if (table) {
             succeededTable.push(output);
@@ -96,6 +99,10 @@ program.version(pkg.version)
       notifier.notify();
     })
     .catch(err => {
+      if (err.message === 'No api key provided') {
+        err.message += ', save a key with `movie-list key my-key`';
+      }
+
       if (json) {
         logger.info(JSON.stringify(isError(err) ? err : {err}));
 
@@ -103,7 +110,13 @@ program.version(pkg.version)
       }
 
       console.error(chalk.red(isError(err) ? err : `Error: ${err}`));
-    }));
+    }))
+  .command('key', 'set api key to omdb')
+  .argument('<key>', 'The api key')
+  .action(({key}, options, logger) => {
+    saveKey({apiKey: key});
+    logger.info(`Saved the given key: ${key} as the api key to omdb`);
+  });
 
 export default argv => {
   program
