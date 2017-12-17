@@ -1,6 +1,6 @@
 {
   "name": "movie-list",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "description": "A node program to show a list of your movies sorted by rating",
   "main": "lib/index.js",
   "bin": {
