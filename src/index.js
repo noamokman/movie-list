@@ -1,18 +1,51 @@
+import {basename} from 'path';
 import _ from 'lodash';
 import debugModule from 'debug';
-import {basename} from 'path';
 import globby from 'globby';
 import videoExtensions from 'video-extensions';
 import movieTitle from 'movie-title';
 import omdb from 'omdb';
-import throat from 'throat';
 import pify from 'pify';
+import pMap from 'p-map';
+import MovieListError from './movie-list-error';
+
 const debug = debugModule('movieList');
+const getMovie = pify(omdb.get);
+const getMovieData = file => {
+  const movieInfo = {
+    path: file,
+    name: movieTitle(basename(file))
+  };
+
+  return getMovie(movieInfo.name)
+    .then(info => {
+      if (!info) {
+        const err = new MovieListError('Movie not found');
+
+        err.code = 'ENOMOVIE';
+
+        return Promise.reject(err);
+      }
+
+      return {
+        state: 'succeeded',
+        value: {
+          ...movieInfo,
+          info
+        }
+      };
+    })
+    .catch(err => ({
+      state: 'failed',
+      value: movieInfo,
+      reason: err
+    }));
+};
 
 const DEFAULT_GLOB = [`**/*.{${videoExtensions.join(',')}}`, '!**/*{sample,Sample,rarbg.com,RARBG.com}*.*'];
 const DEFAULT_CONCURRENT_REQUESTS = 15;
 
-module.exports = ({movieGlob = DEFAULT_GLOB, source = process.cwd(), concurrentRequests = DEFAULT_CONCURRENT_REQUESTS} = {}) => {
+export default function ({movieGlob = DEFAULT_GLOB, source = process.cwd(), concurrentRequests = DEFAULT_CONCURRENT_REQUESTS} = {}) {
   debug('resolved options: %j', {
     movieGlob,
     source,
@@ -34,43 +67,8 @@ module.exports = ({movieGlob = DEFAULT_GLOB, source = process.cwd(), concurrentR
   return globby(movieGlob, {cwd: source})
     .then(files => {
       debug('files found: %d', files.length);
-      const getMovieData = file => {
-        const movieInfo = {
-          path: file,
-          name: movieTitle(basename(file))
-        };
 
-        return pify(omdb.get)(movieInfo.name)
-          .then(info => {
-            movieInfo.info = info;
-
-            if (!info) {
-              const error = new Error('Movie not found');
-
-              error.code = 'ENOMOVIE';
-
-              return {
-                state: 'failed',
-                value: movieInfo,
-                reason: error
-              };
-            }
-
-            return {
-              state: 'succeeded',
-              value: movieInfo
-            };
-          },
-          err => {
-            return {
-              state: 'failed',
-              value: movieInfo,
-              reason: err
-            };
-          });
-      };
-
-      return Promise.all(files.map(throat(concurrentRequests, getMovieData)));
+      return pMap(files, getMovieData, {concurrency: concurrentRequests});
     })
     .then(results => {
       debug('results: %j', results);
@@ -80,4 +78,4 @@ module.exports = ({movieGlob = DEFAULT_GLOB, source = process.cwd(), concurrentR
         .mapValues((value, key) => key === 'succeeded' ? _.map(value, 'value') : value)
         .value();
     });
-};
+}

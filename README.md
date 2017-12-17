@@ -1,74 +1,30 @@
-# movie-list
-
+# movie-list [![Build Status](https://travis-ci.org/noamokman/movie-list.svg?branch=master)](https://travis-ci.org/noamokman/movie-list) [![Coverage Status](https://coveralls.io/repos/github/noamokman/movie-list/badge.svg?branch=master)](https://coveralls.io/github/noamokman/movie-list?branch=master)
 A node program to show a list of your movies sorted by rating
-
-<table>
-  <thead>
-    <tr>
-      <th>Linux</th>
-      <th>OSX</th>
-      <th>Coverage</th>
-      <th>Dependencies</th>
-      <th>DevDependencies</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td colspan="2" align="center">
-        <a href="https://travis-ci.org/noamokman/movie-list"><img src="https://img.shields.io/travis/noamokman/movie-list.svg?style=flat-square"></a>
-      </td>
-      <td align="center">
-<a href='https://coveralls.io/r/noamokman/movie-list'><img src='https://img.shields.io/coveralls/noamokman/movie-list.svg?style=flat-square' alt='Coverage Status' /></a>
-      </td>
-      <td align="center">
-        <a href="https://david-dm.org/noamokman/movie-list"><img src="https://img.shields.io/david/noamokman/movie-list.svg?style=flat-square"></a>
-      </td>
-      <td align="center">
-        <a href="https://david-dm.org/noamokman/movie-list#info=devDependencies"><img src="https://img.shields.io/david/dev/noamokman/movie-list.svg?style=flat-square"/></a>
-      </td>
-    </tr>
-  </tbody>
-</table>
-
 
 ## Installation
 As cli tool
-``` bash
+```bash
 $ [sudo] npm install movie-list -g
 ```
 
 Programmatically
-``` bash
-$ [sudo] npm install movie-list --save
+```bash
+$ [sudo] npm install movie-list
 ```
 
 ## Usage
 ### CLI
-``` bash
-$ movie-list --help
-
-  Usage: movie-list [options] [path]
-
-  Show a list of your movies sorted by rating
-
-  Options:
-
-    -h, --help              output usage information
-    -V, --version           output the version number
-    -s, --sort <property>   Sort by property (title|year|rating|runtime)
-    -o, --order <asc|desc>  Order of the sorting
-    -t, --table             Prints the list in a table
-    -j, --json              Prints the list data as json
-    -n, --no-color          Prints the list without colors
+```bash
+$ movie-list 0.0.0 - A node program to show a list of your movies sorted by rating
 
 ```
 
 ### Programmatically
 ``` js
-var movieList = require('movie-list');
+import movieList from 'movie-list';
 
 movieList({source: '/path/to/movies/folder'})
-  .then(function (listData) {
+  .then((listData) => {
     // listData -> data found on the movies
   });
 ```
@@ -82,4 +38,4 @@ concurrentRequests  | Number of concurrent requests to omdb             | 15
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE) © [Noam Okman](https://github.com/noamokman)
