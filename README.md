@@ -1,4 +1,4 @@
-# movie-list [![Build Status](https://travis-ci.org/noamokman/movie-list.svg?branch=master)](https://travis-ci.org/noamokman/movie-list) [![Coverage Status](https://coveralls.io/repos/github/noamokman/movie-list/badge.svg?branch=master)](https://coveralls.io/github/noamokman/movie-list?branch=master)
+# movie-list [![Build Status](https://travis-ci.org/noamokman/movie-list.svg?branch=master)](https://travis-ci.org/noamokman/movie-list) [![Coverage Status](https://coveralls.io/repos/github/noamokman/movie-list/badge.svg?branch=master)](https://coveralls.io/github/noamokman/movie-list?branch=master) [![Greenkeeper badge](https://badges.greenkeeper.io/noamokman/movie-list.svg)](https://greenkeeper.io/)
 A node program to show a list of your movies sorted by rating
 
 ## Installation
