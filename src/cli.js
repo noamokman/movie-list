@@ -2,7 +2,7 @@ import {isError} from 'util';
 import program from 'caporal';
 import chalk from 'chalk';
 import _ from 'lodash';
-import Table from 'cli-table2';
+import Table from 'cli-table3';
 import updateNotifier from 'update-notifier';
 import pkg from '../package.json';
 import movieList, {saveKey} from '.';
